@@ -1,12 +1,16 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { KPICard } from "@/components/kpi-card";
 import { RevenueChart } from "@/components/charts/revenue-chart";
 import { CampaignChart } from "@/components/charts/campaign-chart";
 import { ChannelChart } from "@/components/charts/channel-chart";
 import { InsightCard } from "@/components/insight-card";
-import { Button } from "@/components/ui/button";
+import { DateRangePicker } from "@/components/date-range-picker";
+import { FilterBar } from "@/components/filter-bar";
+import { ExportMenu } from "@/components/export-menu";
+import { exportToCSV } from "@/lib/export";
+import { usePolling } from "@/hooks/use-polling";
 import {
   kpiData,
   revenueData,
@@ -16,8 +20,6 @@ import {
 } from "@/lib/mock-data";
 import type { Insight } from "@/lib/mock-data";
 
-const periods = ["7d", "30d", "90d"] as const;
-
 export default function DashboardPage() {
   const [kpis, setKpis] = useState(kpiData);
   const [revenue, setRevenue] = useState(revenueData);
@@ -25,36 +27,49 @@ export default function DashboardPage() {
   const [channels, setChannels] = useState(channelData);
   const [insights, setInsights] = useState<Insight[]>(recentInsights);
   const [loaded, setLoaded] = useState(false);
-  const [activePeriod, setActivePeriod] = useState<(typeof periods)[number]>("30d");
+  const [activePeriod, setActivePeriod] = useState("30d");
+
+  const fetchData = useCallback(async () => {
+    try {
+      const { getKPIs, getRevenue, getCampaigns, getChannels, getInsights } =
+        await import("@/lib/api");
+      const [k, r, ca, ch, i] = await Promise.all([
+        getKPIs(activePeriod),
+        getRevenue(activePeriod),
+        getCampaigns(activePeriod),
+        getChannels(activePeriod),
+        getInsights(activePeriod),
+      ]);
+      setKpis(k);
+      setRevenue(r);
+      setCampaigns(ca);
+      setChannels(ch);
+      setInsights((i as Insight[]).slice(0, 5));
+    } catch {
+      // fallback to mock data already set
+    }
+    setLoaded(true);
+  }, [activePeriod]);
 
   useEffect(() => {
-    async function fetchData() {
-      try {
-        const { getKPIs, getRevenue, getCampaigns, getChannels, getInsights } =
-          await import("@/lib/api");
-        const [k, r, ca, ch, i] = await Promise.all([
-          getKPIs(),
-          getRevenue(),
-          getCampaigns(),
-          getChannels(),
-          getInsights(),
-        ]);
-        setKpis(k);
-        setRevenue(r);
-        setCampaigns(ca);
-        setChannels(ch);
-        setInsights((i as Insight[]).slice(0, 5));
-      } catch {
-        // fallback to mock data already set
-      }
-      setLoaded(true);
-    }
     fetchData();
-  }, []);
+  }, [fetchData]);
+
+  const { isRefreshing, timeAgo } = usePolling(fetchData, 60000);
+
+  const handleExportCSV = () => {
+    const exportData = revenue.map((r) => ({
+      month: r.month,
+      revenue: r.revenue,
+      spend: r.spend,
+      roi: r.revenue && r.spend ? (r.revenue / r.spend).toFixed(2) : "N/A",
+    }));
+    exportToCSV(exportData as unknown as Record<string, unknown>[], `dashboard-${activePeriod}`);
+  };
 
   return (
     <div className="space-y-6">
-      {/* Header row with time period selector */}
+      {/* Header row with date range picker and export */}
       <div
         className={`flex items-center justify-between transition-all duration-500 ${
           loaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
@@ -62,25 +77,29 @@ export default function DashboardPage() {
       >
         <div>
           <h1 className="text-xl font-semibold text-zinc-900">Overview</h1>
-          <p className="text-sm text-zinc-500">Track your marketing performance</p>
+          <p className="text-sm text-zinc-500">
+            Track your marketing performance
+            <span className="ml-2 text-zinc-400">
+              {isRefreshing ? "Refreshing..." : `Updated ${timeAgo()}`}
+            </span>
+          </p>
         </div>
-        <div className="flex items-center gap-1 rounded-lg border border-zinc-200 bg-white p-1">
-          {periods.map((period) => (
-            <Button
-              key={period}
-              variant="ghost"
-              size="sm"
-              onClick={() => setActivePeriod(period)}
-              className={`h-7 px-3 text-xs font-medium rounded-md transition-colors ${
-                activePeriod === period
-                  ? "bg-zinc-900 text-white hover:bg-zinc-800 hover:text-white"
-                  : "text-zinc-500 hover:text-zinc-900"
-              }`}
-            >
-              {period}
-            </Button>
-          ))}
+        <div className="flex items-center gap-3">
+          <DateRangePicker
+            onPeriodChange={setActivePeriod}
+            activePeriod={activePeriod}
+          />
+          <ExportMenu onExportCSV={handleExportCSV} />
         </div>
+      </div>
+
+      {/* Filter bar */}
+      <div
+        className={`transition-all duration-500 ${
+          loaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
+        }`}
+      >
+        <FilterBar />
       </div>
 
       {/* KPI Cards */}

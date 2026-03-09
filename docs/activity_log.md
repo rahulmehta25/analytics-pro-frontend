@@ -1,5 +1,19 @@
 # Activity Log
 
+## 2026-03-09 12:00 EST
+
+### User Prompt
+"Implement Phase 3 (Dashboard Polish) for the analytics-pro project. This includes: date range picker, filter bar, data export, chart improvements, and auto-refresh."
+
+### Actions Taken
+- Created `src/components/date-range-picker.tsx` - date range picker with 7d/30d/90d/Quarter presets and custom date inputs
+- Created `src/components/filter-bar.tsx` - filter bar with channel and campaign dropdowns plus clear button
+- Created `src/lib/export.ts` - CSV export utility function
+- Created `src/components/export-menu.tsx` - dropdown export menu component
+- Created `src/hooks/use-polling.ts` - auto-refresh hook with visibility-aware polling and "time ago" display
+- Modified `src/components/charts/revenue-chart.tsx` - added Legend import and component from recharts
+- Rewrote `src/app/dashboard/page.tsx` - integrated DateRangePicker, FilterBar, ExportMenu, usePolling, and "Updated X ago" indicator; replaced inline period buttons with DateRangePicker; extracted fetchData into useCallback for reuse by polling
+
 ## 2026-03-08 00:35 EST
 
 ### User Prompt

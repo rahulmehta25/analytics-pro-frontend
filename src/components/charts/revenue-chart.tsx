@@ -4,6 +4,7 @@ import {
   Area,
   AreaChart,
   CartesianGrid,
+  Legend,
   ResponsiveContainer,
   Tooltip,
   XAxis,
@@ -65,6 +66,16 @@ export function RevenueChart({ data }: RevenueChartProps) {
                 `$${Number(value).toLocaleString()}`,
                 String(name).charAt(0).toUpperCase() + String(name).slice(1),
               ]}
+            />
+            <Legend
+              verticalAlign="top"
+              align="right"
+              iconType="circle"
+              iconSize={8}
+              wrapperStyle={{ fontSize: "12px", paddingBottom: "8px" }}
+              formatter={(value: string) => (
+                <span className="text-zinc-500 capitalize">{value}</span>
+              )}
             />
             <Area
               type="monotone"
