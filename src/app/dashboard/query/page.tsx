@@ -22,7 +22,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { Search, Sparkles, Table2, Send } from "lucide-react";
+import { Search, Sparkles, Table2, Send, RotateCcw } from "lucide-react";
 import { querySuggestions, queryResponses } from "@/lib/mock-data";
 
 export default function QueryPage() {
@@ -37,6 +37,7 @@ export default function QueryPage() {
   const [displayedText, setDisplayedText] = useState("");
   const [showChart, setShowChart] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [sessionId, setSessionId] = useState<string | null>(null);
   const textRef = useRef<string>("");
   const animationIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -73,6 +74,15 @@ export default function QueryPage() {
 
   useEffect(() => () => stopAnimation(), [stopAnimation]);
 
+  const handleNewConversation = useCallback(() => {
+    setSessionId(null);
+    setResponse(null);
+    setDisplayedText("");
+    setShowChart(false);
+    setQuery("");
+    stopAnimation();
+  }, [stopAnimation]);
+
   const handleSubmit = useCallback(
     async (q: string) => {
       if (!q.trim()) return;
@@ -83,11 +93,44 @@ export default function QueryPage() {
       setShowChart(false);
 
       try {
-        const { queryAI } = await import("@/lib/api");
-        const result = await queryAI(q);
-        setResponse(result);
-        setIsLoading(false);
-        animateText(result.text);
+        const { queryAIStream } = await import("@/lib/api");
+        await queryAIStream(
+          q,
+          sessionId,
+          (streamedText: string) => {
+            setDisplayedText(streamedText);
+            setIsLoading(false);
+            setResponse((prev) => prev || { text: "", chartType: "bar", chartData: [], sources: [] });
+          },
+          (data) => {
+            setResponse({
+              text: data.text,
+              chartType: data.chartType,
+              chartData: data.chartData,
+              sources: data.sources,
+            });
+            setDisplayedText(data.text);
+            setShowChart(true);
+            setIsLoading(false);
+            if (data.sessionId) setSessionId(data.sessionId);
+          },
+          async () => {
+            // Stream endpoint failed - fall back to non-streaming
+            try {
+              const { queryAI } = await import("@/lib/api");
+              const result = await queryAI(q);
+              setResponse(result);
+              setIsLoading(false);
+              animateText(result.text);
+            } catch {
+              const fallback =
+                queryResponses[q] || queryResponses["Best performing campaign?"];
+              setResponse(fallback);
+              setIsLoading(false);
+              animateText(fallback.text);
+            }
+          }
+        );
       } catch {
         const fallback =
           queryResponses[q] || queryResponses["Best performing campaign?"];
@@ -96,7 +139,7 @@ export default function QueryPage() {
         animateText(fallback.text);
       }
     },
-    [animateText, stopAnimation]
+    [animateText, stopAnimation, sessionId]
   );
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -122,9 +165,20 @@ export default function QueryPage() {
           mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
         }`}
       >
-        <div className="inline-flex items-center gap-2 rounded-full bg-blue-50 px-3 py-1 text-sm text-blue-600">
-          <Sparkles className="size-3.5" />
-          AI-Powered Analytics
+        <div className="flex items-center justify-center gap-3">
+          <div className="inline-flex items-center gap-2 rounded-full bg-blue-50 px-3 py-1 text-sm text-blue-600">
+            <Sparkles className="size-3.5" />
+            AI-Powered Analytics
+          </div>
+          {sessionId && (
+            <button
+              onClick={handleNewConversation}
+              className="inline-flex items-center gap-1.5 rounded-full border border-zinc-200 bg-white px-3 py-1 text-xs text-zinc-500 hover:bg-zinc-50 hover:text-zinc-700 transition-colors"
+            >
+              <RotateCcw className="size-3" />
+              New conversation
+            </button>
+          )}
         </div>
         <h1 className="text-2xl font-semibold text-zinc-900">
           Ask anything about your marketing data
