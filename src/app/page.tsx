@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { motion } from "framer-motion";
 import {
   BarChart3,
   Brain,
@@ -23,19 +24,20 @@ import {
 /* ------------------------------------------------------------------ */
 /*  Animated counter hook                                              */
 /* ------------------------------------------------------------------ */
-function useCountUp(end: number, duration = 2000, start = 0, enabled = false) {
+function useCountUp(end: number, duration = 2000, start = 0) {
   const [value, setValue] = useState(start);
-  const ref = useRef<HTMLSpanElement>(null);
+  const hasRun = useRef(false);
 
   useEffect(() => {
-    if (!enabled) return;
+    if (hasRun.current) return;
+    hasRun.current = true;
+
     let raf: number;
     const startTime = performance.now();
 
     function tick(now: number) {
       const elapsed = now - startTime;
       const progress = Math.min(elapsed / duration, 1);
-      // ease-out cubic
       const eased = 1 - Math.pow(1 - progress, 3);
       setValue(Math.round(start + (end - start) * eased));
       if (progress < 1) raf = requestAnimationFrame(tick);
@@ -43,35 +45,47 @@ function useCountUp(end: number, duration = 2000, start = 0, enabled = false) {
 
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, [end, duration, start, enabled]);
+  }, [end, duration, start]);
 
-  return { value, ref };
+  return value;
 }
 
 /* ------------------------------------------------------------------ */
-/*  Intersection observer hook for scroll animations                   */
+/*  Stat item component                                                */
 /* ------------------------------------------------------------------ */
-function useInView(threshold = 0.2) {
-  const ref = useRef<HTMLDivElement>(null);
-  const [inView, setInView] = useState(false);
+function StatItem({
+  stat,
+  index,
+}: {
+  stat: { label: string; value: number; suffix: string; format: string };
+  index: number;
+}) {
+  const counter = useCountUp(
+    stat.format === "abbr" ? 2.4 : stat.value,
+    2000,
+    0,
+  );
 
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const obs = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setInView(true);
-          obs.disconnect();
-        }
-      },
-      { threshold }
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, [threshold]);
+  let display: string;
+  if (stat.format === "abbr") {
+    display = `${counter === 2 ? "2.4" : counter > 2 ? "2.4" : counter}M`;
+  } else if (stat.format === "decimal") {
+    display = counter <= 1 ? `${(counter * 1.2).toFixed(1)}` : "1.2";
+  } else {
+    display = String(counter);
+  }
 
-  return { ref, inView };
+  return (
+    <div
+      className={`text-center animate-fade-in-up stagger-${index + 1}`}
+    >
+      <p className="text-3xl font-bold text-zinc-900 sm:text-4xl">
+        {display}
+        {stat.suffix}
+      </p>
+      <p className="mt-1 text-sm text-zinc-500">{stat.label}</p>
+    </div>
+  );
 }
 
 /* ------------------------------------------------------------------ */
@@ -142,14 +156,6 @@ const platforms = [
 /*  Page component                                                     */
 /* ------------------------------------------------------------------ */
 export default function LandingPage() {
-  const [mounted, setMounted] = useState(false);
-  const statsSection = useInView(0.3);
-  const featuresSection = useInView(0.15);
-  const previewSection = useInView(0.15);
-  const platformsSection = useInView(0.3);
-
-  useEffect(() => setMounted(true), []);
-
   return (
     <div className="min-h-screen bg-white">
       {/* ---- Nav ---- */}
@@ -179,11 +185,7 @@ export default function LandingPage() {
       {/* ---- Hero ---- */}
       <section className="relative overflow-hidden">
         <div className="mx-auto max-w-6xl px-4 pb-20 pt-20 sm:px-6 sm:pt-28 sm:pb-28">
-          <div
-            className={`mx-auto max-w-3xl text-center transition-all duration-700 ${
-              mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-            }`}
-          >
+          <div className="mx-auto max-w-3xl text-center animate-fade-in-up">
             <Badge
               variant="secondary"
               className="mb-6 bg-blue-50 text-blue-600 px-3 py-1 text-xs font-medium"
@@ -192,10 +194,10 @@ export default function LandingPage() {
               Enterprise Marketing Analytics + RAG
             </Badge>
 
-            <h1 className="text-4xl font-bold tracking-tight text-zinc-900 sm:text-5xl lg:text-6xl">
+            <h1 className="text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl gradient-text">
               Your marketing data,
               <br />
-              <span className="text-blue-600">answered instantly</span>
+              answered instantly
             </h1>
 
             <p className="mx-auto mt-6 max-w-xl text-lg text-zinc-500 leading-relaxed">
@@ -204,76 +206,52 @@ export default function LandingPage() {
             </p>
 
             <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
-              <Link href="/dashboard">
-                <Button size="lg" className="h-11 px-6 text-sm font-medium">
-                  Try Demo
-                  <ArrowRight className="ml-2 size-4" />
-                </Button>
-              </Link>
-              <a
-                href="https://github.com/rahulmehta25/analytics-pro"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Button
-                  variant="outline"
-                  size="lg"
-                  className="h-11 px-6 text-sm font-medium border-zinc-200 text-zinc-700"
+              <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
+                <Link href="/dashboard">
+                  <Button size="lg" className="h-11 px-6 text-sm font-medium">
+                    Try Demo
+                    <ArrowRight className="ml-2 size-4" />
+                  </Button>
+                </Link>
+              </motion.div>
+              <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
+                <a
+                  href="https://github.com/rahulmehta25/analytics-pro"
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
-                  View on GitHub
-                </Button>
-              </a>
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    className="h-11 px-6 text-sm font-medium border-zinc-200 text-zinc-700"
+                  >
+                    View on GitHub
+                  </Button>
+                </a>
+              </motion.div>
             </div>
           </div>
         </div>
       </section>
 
       {/* ---- Animated stats ---- */}
-      <section ref={statsSection.ref} className="border-y border-zinc-100 bg-zinc-50/50">
+      <section className="border-y border-zinc-100 bg-zinc-50/50">
         <div className="mx-auto grid max-w-6xl grid-cols-2 gap-8 px-4 py-14 sm:px-6 lg:grid-cols-4">
-          {stats.map((stat, i) => {
-            const counter = useCountUp(
-              stat.format === "abbr" ? 2.4 : stat.value as number,
-              2000,
-              0,
-              statsSection.inView
-            );
-
-            let display: string;
-            if (stat.format === "abbr") {
-              display = `${counter.value === 2 ? "2.4" : counter.value > 2 ? "2.4" : counter.value}M`;
-            } else if (stat.format === "decimal") {
-              display = counter.value <= 1 ? `${(counter.value * 1.2).toFixed(1)}` : "1.2";
-            } else {
-              display = String(counter.value);
-            }
-
-            return (
-              <div
-                key={stat.label}
-                className={`text-center transition-all duration-700 ${
-                  statsSection.inView
-                    ? "opacity-100 translate-y-0"
-                    : "opacity-0 translate-y-4"
-                }`}
-                style={{ transitionDelay: `${i * 100}ms` }}
-              >
-                <p className="text-3xl font-bold text-zinc-900 sm:text-4xl">
-                  {statsSection.inView ? display : "0"}
-                  {stat.suffix}
-                </p>
-                <p className="mt-1 text-sm text-zinc-500">{stat.label}</p>
-              </div>
-            );
-          })}
+          {stats.map((stat, i) => (
+            <StatItem
+              key={stat.label}
+              stat={stat}
+              index={i}
+            />
+          ))}
         </div>
       </section>
 
       {/* ---- Features ---- */}
-      <section ref={featuresSection.ref} className="py-20 sm:py-28">
+      <section className="py-20 sm:py-28">
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
           <div className="mx-auto max-w-2xl text-center mb-14">
-            <h2 className="text-3xl font-bold tracking-tight text-zinc-900 sm:text-4xl">
+            <h2 className="text-3xl font-bold tracking-tight sm:text-4xl gradient-text">
               Everything you need to understand your marketing
             </h2>
             <p className="mt-4 text-zinc-500">
@@ -284,37 +262,36 @@ export default function LandingPage() {
 
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {features.map((feature, i) => (
-              <Card
+              <motion.div
                 key={feature.title}
-                className={`border-zinc-200 shadow-sm rounded-xl transition-all duration-500 hover:shadow-md hover:-translate-y-0.5 ${
-                  featuresSection.inView
-                    ? "opacity-100 translate-y-0"
-                    : "opacity-0 translate-y-6"
-                }`}
-                style={{ transitionDelay: `${i * 80}ms` }}
+                className={`animate-fade-in-up hover-lift stagger-${i + 1}`}
+                whileHover={{ y: -4, boxShadow: "0 12px 24px rgba(0,0,0,0.08)" }}
+                transition={{ type: "spring", stiffness: 400, damping: 25 }}
               >
-                <CardContent className="p-6">
-                  <div className="flex size-10 items-center justify-center rounded-lg bg-blue-50">
-                    <feature.icon className="size-5 text-blue-600" />
-                  </div>
-                  <h3 className="mt-4 text-sm font-semibold text-zinc-900">
-                    {feature.title}
-                  </h3>
-                  <p className="mt-2 text-sm text-zinc-500 leading-relaxed">
-                    {feature.description}
-                  </p>
-                </CardContent>
-              </Card>
+                <Card className="border-zinc-200 shadow-sm rounded-xl h-full">
+                  <CardContent className="p-6">
+                    <div className="flex size-10 items-center justify-center rounded-lg bg-blue-50">
+                      <feature.icon className="size-5 text-blue-600" />
+                    </div>
+                    <h3 className="mt-4 text-sm font-semibold text-zinc-900">
+                      {feature.title}
+                    </h3>
+                    <p className="mt-2 text-sm text-zinc-500 leading-relaxed">
+                      {feature.description}
+                    </p>
+                  </CardContent>
+                </Card>
+              </motion.div>
             ))}
           </div>
         </div>
       </section>
 
       {/* ---- Dashboard preview ---- */}
-      <section ref={previewSection.ref} className="bg-zinc-50/50 py-20 sm:py-28">
+      <section className="bg-zinc-50/50 py-20 sm:py-28">
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
           <div className="mx-auto max-w-2xl text-center mb-12">
-            <h2 className="text-3xl font-bold tracking-tight text-zinc-900 sm:text-4xl">
+            <h2 className="text-3xl font-bold tracking-tight sm:text-4xl gradient-text">
               A dashboard that works for you
             </h2>
             <p className="mt-4 text-zinc-500">
@@ -323,13 +300,7 @@ export default function LandingPage() {
             </p>
           </div>
 
-          <div
-            className={`transition-all duration-700 ${
-              previewSection.inView
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-8"
-            }`}
-          >
+          <div className="animate-fade-in-scale stagger-3">
             <Card className="border-zinc-200 shadow-lg rounded-2xl overflow-hidden">
               <CardContent className="p-0">
                 {/* Mock dashboard preview */}
@@ -421,7 +392,7 @@ export default function LandingPage() {
               >
                 AI-Powered
               </Badge>
-              <h2 className="text-3xl font-bold tracking-tight text-zinc-900 sm:text-4xl">
+              <h2 className="text-3xl font-bold tracking-tight sm:text-4xl gradient-text">
                 Ask questions, get answers
               </h2>
               <p className="mt-4 text-zinc-500 leading-relaxed">
@@ -443,16 +414,18 @@ export default function LandingPage() {
                 ))}
               </ul>
               <div className="mt-8">
-                <Link href="/dashboard/query">
-                  <Button size="lg" className="h-11 px-6 text-sm font-medium">
-                    Try AI Query
-                    <ArrowRight className="ml-2 size-4" />
-                  </Button>
-                </Link>
+                <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} className="inline-block">
+                  <Link href="/dashboard/query">
+                    <Button size="lg" className="h-11 px-6 text-sm font-medium">
+                      Try AI Query
+                      <ArrowRight className="ml-2 size-4" />
+                    </Button>
+                  </Link>
+                </motion.div>
               </div>
             </div>
 
-            <Card className="border-zinc-200 shadow-md rounded-2xl">
+            <Card className="border-zinc-200 shadow-md rounded-2xl hover-lift">
               <CardContent className="p-6">
                 <div className="rounded-xl border border-zinc-200 bg-zinc-50 p-4 mb-4">
                   <div className="flex items-center gap-2 text-sm text-zinc-500">
@@ -499,25 +472,18 @@ export default function LandingPage() {
       </section>
 
       {/* ---- Compatible platforms ---- */}
-      <section ref={platformsSection.ref} className="border-t border-zinc-100 bg-zinc-50/50 py-16">
+      <section className="border-t border-zinc-100 bg-zinc-50/50 py-16">
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
           <p className="text-center text-sm font-medium text-zinc-400 mb-8">
             Works with your existing marketing stack
           </p>
-          <div
-            className={`grid grid-cols-3 gap-6 sm:grid-cols-6 transition-all duration-700 ${
-              platformsSection.inView
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-4"
-            }`}
-          >
+          <div className="grid grid-cols-3 gap-6 sm:grid-cols-6">
             {platforms.map((platform, i) => (
               <div
                 key={platform.name}
-                className="flex flex-col items-center gap-2 transition-all duration-500"
-                style={{ transitionDelay: `${i * 60}ms` }}
+                className={`flex flex-col items-center gap-2 animate-fade-in-up stagger-${i + 1}`}
               >
-                <div className="flex size-12 items-center justify-center rounded-xl border border-zinc-200 bg-white shadow-sm">
+                <div className="flex size-12 items-center justify-center rounded-xl border border-zinc-200 bg-white shadow-sm hover-lift">
                   <platform.icon className="size-5 text-zinc-400" />
                 </div>
                 <span className="text-xs text-zinc-500 font-medium">{platform.name}</span>
@@ -532,7 +498,7 @@ export default function LandingPage() {
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
           <Card className="border-zinc-200 shadow-sm rounded-2xl">
             <CardContent className="p-10 sm:p-16 text-center">
-              <h2 className="text-3xl font-bold tracking-tight text-zinc-900 sm:text-4xl">
+              <h2 className="text-3xl font-bold tracking-tight sm:text-4xl gradient-text">
                 Ready to try it?
               </h2>
               <p className="mx-auto mt-4 max-w-md text-zinc-500">
@@ -540,25 +506,29 @@ export default function LandingPage() {
                 required.
               </p>
               <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-                <Link href="/dashboard">
-                  <Button size="lg" className="h-11 px-8 text-sm font-medium">
-                    Open Dashboard
-                    <ArrowRight className="ml-2 size-4" />
-                  </Button>
-                </Link>
-                <a
-                  href="https://github.com/rahulmehta25/analytics-pro"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Button
-                    variant="outline"
-                    size="lg"
-                    className="h-11 px-8 text-sm font-medium border-zinc-200 text-zinc-700"
+                <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
+                  <Link href="/dashboard">
+                    <Button size="lg" className="h-11 px-8 text-sm font-medium">
+                      Open Dashboard
+                      <ArrowRight className="ml-2 size-4" />
+                    </Button>
+                  </Link>
+                </motion.div>
+                <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
+                  <a
+                    href="https://github.com/rahulmehta25/analytics-pro"
+                    target="_blank"
+                    rel="noopener noreferrer"
                   >
-                    GitHub
-                  </Button>
-                </a>
+                    <Button
+                      variant="outline"
+                      size="lg"
+                      className="h-11 px-8 text-sm font-medium border-zinc-200 text-zinc-700"
+                    >
+                      GitHub
+                    </Button>
+                  </a>
+                </motion.div>
               </div>
             </CardContent>
           </Card>

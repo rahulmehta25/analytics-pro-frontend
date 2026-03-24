@@ -12,6 +12,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { motion } from "framer-motion";
 import { Search, ArrowUpDown, TrendingUp, TrendingDown, ArrowRight } from "lucide-react";
 import { insightsData } from "@/lib/mock-data";
 import type { Insight, InsightSeverity } from "@/lib/mock-data";
@@ -60,8 +61,8 @@ export default function InsightsPage() {
     async function fetchData() {
       try {
         const { getInsights } = await import("@/lib/api");
-        const data = await getInsights();
-        setInsights(data as Insight[]);
+        const result = await getInsights();
+        setInsights(result.data as Insight[]);
       } catch {
         // fallback to mock
       }
@@ -101,9 +102,9 @@ export default function InsightsPage() {
   }, [insights, filter, search, sort]);
 
   return (
-    <div className="space-y-6 animate-fade-in">
+    <motion.div className="space-y-6" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
       <div>
-        <h1 className="text-xl font-semibold text-zinc-900">AI Insights</h1>
+        <h1 className="text-xl font-semibold bg-gradient-to-r from-slate-900 via-blue-800 to-slate-900 bg-clip-text text-transparent">AI Insights</h1>
         <p className="mt-1 text-sm text-zinc-500">
           Automated insights and recommendations from your marketing data
         </p>
@@ -156,14 +157,19 @@ export default function InsightsPage() {
       </div>
 
       {/* Insights grid */}
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+      <motion.div className="grid grid-cols-1 gap-4 md:grid-cols-2" variants={{ hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0.08 } } }} initial="hidden" animate="show">
         {filteredInsights.map((insight) => {
           const config = severityConfig[insight.severity];
 
           return (
-            <Card
+            <motion.div
               key={insight.id}
-              className="border-zinc-200 shadow-sm rounded-xl transition-shadow hover:shadow-md"
+              variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } }}
+              whileHover={{ y: -4, boxShadow: "0 12px 24px rgba(0,0,0,0.08)" }}
+              transition={{ type: "spring", stiffness: 400, damping: 25 }}
+            >
+            <Card
+              className="border-zinc-200 shadow-sm rounded-xl"
             >
               <CardContent className="p-5">
                 <div className="flex items-start justify-between gap-3">
@@ -233,9 +239,10 @@ export default function InsightsPage() {
                 </button>
               </CardContent>
             </Card>
+            </motion.div>
           );
         })}
-      </div>
+      </motion.div>
 
       {filteredInsights.length === 0 && (
         <div className="py-16 text-center">
@@ -244,6 +251,6 @@ export default function InsightsPage() {
           </p>
         </div>
       )}
-    </div>
+    </motion.div>
   );
 }

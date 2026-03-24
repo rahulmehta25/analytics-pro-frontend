@@ -102,6 +102,8 @@ const stageLabels: Record<Stage, string> = {
 
 /* ── Animated dots for vector embedding ───────────────────────────── */
 
+const embeddingOpacities = [0.72, 0.91, 0.56, 0.83, 0.64, 0.97, 0.48, 0.77, 0.88, 0.53, 0.95, 0.69];
+
 function EmbeddingViz({ active }: { active: boolean }) {
   return (
     <div className="flex items-center gap-1 h-6">
@@ -114,7 +116,7 @@ function EmbeddingViz({ active }: { active: boolean }) {
           style={{
             height: active ? `${12 + Math.sin(i * 0.8) * 10}px` : "4px",
             transitionDelay: active ? `${i * 50}ms` : "0ms",
-            opacity: active ? 0.4 + Math.random() * 0.6 : 0.3,
+            opacity: active ? embeddingOpacities[i] : 0.3,
           }}
         />
       ))}
@@ -133,7 +135,7 @@ export default function RAGDemoPage() {
   const [retrievedChunks, setRetrievedChunks] = useState<number[]>([]);
   const [streamedAnswer, setStreamedAnswer] = useState("");
   const [selectedChunkIndex, setSelectedChunkIndex] = useState<number | null>(null);
-  const [isAutoPlaying, setIsAutoPlaying] = useState(false);
+  const [, setIsAutoPlaying] = useState(false);
   const answerRef = useRef<HTMLDivElement>(null);
 
   function reset() {

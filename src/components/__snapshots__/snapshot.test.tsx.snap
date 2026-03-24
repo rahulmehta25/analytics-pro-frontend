@@ -1,0 +1,792 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Component Snapshots > InsightCard > matches snapshot for critical severity 1`] = `
+<div>
+  <div
+    class="rounded-xl border border-zinc-200 bg-white p-4 shadow-sm transition-all hover:shadow-md"
+  >
+    <div
+      class="flex items-start justify-between gap-2"
+    >
+      <span
+        class="group/badge inline-flex h-5 w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-4xl border px-2 py-0.5 font-medium whitespace-nowrap transition-all focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&>svg]:pointer-events-none [&>svg]:size-3! [a]:hover:bg-muted [a]:hover:text-muted-foreground text-[10px] bg-red-50 text-red-600 border-red-200"
+        data-slot="badge"
+        data-variant="outline"
+      >
+        Critical
+      </span>
+      <span
+        class="text-[10px] text-zinc-400 whitespace-nowrap"
+      >
+        2 hours ago
+      </span>
+    </div>
+    <p
+      class="mt-2 text-sm font-medium text-zinc-900 leading-snug"
+    >
+      Budget Exceeded
+    </p>
+    <p
+      class="mt-1 text-xs text-zinc-500 leading-relaxed line-clamp-2"
+    >
+      Campaign #7 has exceeded its budget by 23%
+    </p>
+  </div>
+</div>
+`;
+
+exports[`Component Snapshots > InsightCard > matches snapshot for info severity 1`] = `
+<div>
+  <div
+    class="rounded-xl border border-zinc-200 bg-white p-4 shadow-sm transition-all hover:shadow-md"
+  >
+    <div
+      class="flex items-start justify-between gap-2"
+    >
+      <span
+        class="group/badge inline-flex h-5 w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-4xl border px-2 py-0.5 font-medium whitespace-nowrap transition-all focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&>svg]:pointer-events-none [&>svg]:size-3! [a]:hover:bg-muted [a]:hover:text-muted-foreground text-[10px] bg-blue-50 text-blue-600 border-blue-200"
+        data-slot="badge"
+        data-variant="outline"
+      >
+        Info
+      </span>
+      <span
+        class="text-[10px] text-zinc-400 whitespace-nowrap"
+      >
+        1 day ago
+      </span>
+    </div>
+    <p
+      class="mt-2 text-sm font-medium text-zinc-900 leading-snug"
+    >
+      New Segment Identified
+    </p>
+    <p
+      class="mt-1 text-xs text-zinc-500 leading-relaxed line-clamp-2"
+    >
+      AI has identified a high-converting audience segment
+    </p>
+  </div>
+</div>
+`;
+
+exports[`Component Snapshots > InsightCard > matches snapshot for positive severity 1`] = `
+<div>
+  <div
+    class="rounded-xl border border-zinc-200 bg-white p-4 shadow-sm transition-all hover:shadow-md"
+  >
+    <div
+      class="flex items-start justify-between gap-2"
+    >
+      <span
+        class="group/badge inline-flex h-5 w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-4xl border px-2 py-0.5 font-medium whitespace-nowrap transition-all focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&>svg]:pointer-events-none [&>svg]:size-3! [a]:hover:bg-muted [a]:hover:text-muted-foreground text-[10px] bg-emerald-50 text-emerald-600 border-emerald-200"
+        data-slot="badge"
+        data-variant="outline"
+      >
+        Positive
+      </span>
+      <span
+        class="text-[10px] text-zinc-400 whitespace-nowrap"
+      >
+        1 day ago
+      </span>
+    </div>
+    <p
+      class="mt-2 text-sm font-medium text-zinc-900 leading-snug"
+    >
+      ROI Improvement
+    </p>
+    <p
+      class="mt-1 text-xs text-zinc-500 leading-relaxed line-clamp-2"
+    >
+      LinkedIn ads showing 4.2x ROI improvement
+    </p>
+  </div>
+</div>
+`;
+
+exports[`Component Snapshots > InsightCard > matches snapshot for warning severity 1`] = `
+<div>
+  <div
+    class="rounded-xl border border-zinc-200 bg-white p-4 shadow-sm transition-all hover:shadow-md"
+  >
+    <div
+      class="flex items-start justify-between gap-2"
+    >
+      <span
+        class="group/badge inline-flex h-5 w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-4xl border px-2 py-0.5 font-medium whitespace-nowrap transition-all focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&>svg]:pointer-events-none [&>svg]:size-3! [a]:hover:bg-muted [a]:hover:text-muted-foreground text-[10px] bg-amber-50 text-amber-600 border-amber-200"
+        data-slot="badge"
+        data-variant="outline"
+      >
+        Warning
+      </span>
+      <span
+        class="text-[10px] text-zinc-400 whitespace-nowrap"
+      >
+        5 hours ago
+      </span>
+    </div>
+    <p
+      class="mt-2 text-sm font-medium text-zinc-900 leading-snug"
+    >
+      Email Rates Dropping
+    </p>
+    <p
+      class="mt-1 text-xs text-zinc-500 leading-relaxed line-clamp-2"
+    >
+      Open rates have decreased 15% this week
+    </p>
+  </div>
+</div>
+`;
+
+exports[`Component Snapshots > KPICard > matches snapshot with downward trend 1`] = `
+<div>
+  <div
+    class="group/card flex flex-col gap-4 bg-card py-4 text-sm text-card-foreground ring-1 ring-foreground/10 has-data-[slot=card-footer]:pb-0 has-[>img:first-child]:pt-0 data-[size=sm]:gap-3 data-[size=sm]:py-3 data-[size=sm]:has-data-[slot=card-footer]:pb-0 *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl border-zinc-200 shadow-sm rounded-xl overflow-hidden"
+    data-size="default"
+    data-slot="card"
+  >
+    <div
+      class="group-data-[size=sm]/card:px-3 p-0"
+      data-slot="card-content"
+    >
+      <div
+        class="p-4 pb-3"
+      >
+        <p
+          class="text-xs font-medium text-zinc-500 uppercase tracking-wide"
+        >
+          Conversions
+        </p>
+        <div
+          class="mt-2 flex items-baseline gap-2"
+        >
+          <p
+            class="text-2xl font-semibold text-zinc-900 tabular-nums"
+          >
+            1.5K
+          </p>
+          <div
+            class="flex items-center gap-0.5 text-red-600"
+          >
+            <svg
+              aria-hidden="true"
+              class="lucide lucide-trending-down size-3.5"
+              fill="none"
+              height="24"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M16 17h6v-6"
+              />
+              <path
+                d="m22 17-8.5-8.5-5 5L2 7"
+              />
+            </svg>
+            <span
+              class="text-xs font-medium"
+            >
+              -5%
+            </span>
+          </div>
+        </div>
+        <p
+          class="mt-1 text-xs text-zinc-400"
+        >
+          30d
+        </p>
+      </div>
+      <div
+        class="h-10 w-full px-1"
+      >
+        <div
+          class="recharts-responsive-container"
+          style="width: 100%; height: 40px; min-width: 0px;"
+        >
+          <div
+            style="width: 0px; overflow-x: visible;"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Component Snapshots > KPICard > matches snapshot with upward trend 1`] = `
+<div>
+  <div
+    class="group/card flex flex-col gap-4 bg-card py-4 text-sm text-card-foreground ring-1 ring-foreground/10 has-data-[slot=card-footer]:pb-0 has-[>img:first-child]:pt-0 data-[size=sm]:gap-3 data-[size=sm]:py-3 data-[size=sm]:has-data-[slot=card-footer]:pb-0 *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl border-zinc-200 shadow-sm rounded-xl overflow-hidden"
+    data-size="default"
+    data-slot="card"
+  >
+    <div
+      class="group-data-[size=sm]/card:px-3 p-0"
+      data-slot="card-content"
+    >
+      <div
+        class="p-4 pb-3"
+      >
+        <p
+          class="text-xs font-medium text-zinc-500 uppercase tracking-wide"
+        >
+          Revenue
+        </p>
+        <div
+          class="mt-2 flex items-baseline gap-2"
+        >
+          <p
+            class="text-2xl font-semibold text-zinc-900 tabular-nums"
+          >
+            $1.2M
+          </p>
+          <div
+            class="flex items-center gap-0.5 text-emerald-600"
+          >
+            <svg
+              aria-hidden="true"
+              class="lucide lucide-trending-up size-3.5"
+              fill="none"
+              height="24"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M16 7h6v6"
+              />
+              <path
+                d="m22 7-8.5 8.5-5-5L2 17"
+              />
+            </svg>
+            <span
+              class="text-xs font-medium"
+            >
+              +18%
+            </span>
+          </div>
+        </div>
+        <p
+          class="mt-1 text-xs text-zinc-400"
+        >
+          7mo total
+        </p>
+      </div>
+      <div
+        class="h-10 w-full px-1"
+      >
+        <div
+          class="recharts-responsive-container"
+          style="width: 100%; height: 40px; min-width: 0px;"
+        >
+          <div
+            style="width: 0px; overflow-x: visible;"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Component Snapshots > Sidebar > matches snapshot 1`] = `
+<div>
+  <aside
+    class="hidden h-full flex-col border-r border-zinc-200 bg-white transition-all duration-200 md:flex w-56"
+  >
+    <div
+      class="flex h-14 items-center border-b border-zinc-100 px-4 justify-between"
+    >
+      <div
+        class="flex items-center gap-2"
+      >
+        <div
+          class="flex size-7 items-center justify-center rounded-lg bg-zinc-900"
+        >
+          <svg
+            aria-hidden="true"
+            class="lucide lucide-chart-column size-4 text-white"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M3 3v16a2 2 0 0 0 2 2h16"
+            />
+            <path
+              d="M18 17V9"
+            />
+            <path
+              d="M13 17V5"
+            />
+            <path
+              d="M8 17v-3"
+            />
+          </svg>
+        </div>
+        <span
+          class="text-sm font-semibold text-zinc-900"
+        >
+          Analytics Pro
+        </span>
+      </div>
+    </div>
+    <nav
+      class="flex flex-1 flex-col gap-1 p-3"
+    >
+      <div
+        class="mb-2 text-[10px] font-medium uppercase tracking-wider text-zinc-400"
+      >
+        Menu
+      </div>
+      <a
+        class="group flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-150 bg-zinc-900 text-white"
+        href="/dashboard"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-layout-dashboard size-4 flex-shrink-0 text-white"
+          fill="none"
+          height="24"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <rect
+            height="9"
+            rx="1"
+            width="7"
+            x="3"
+            y="3"
+          />
+          <rect
+            height="5"
+            rx="1"
+            width="7"
+            x="14"
+            y="3"
+          />
+          <rect
+            height="9"
+            rx="1"
+            width="7"
+            x="14"
+            y="12"
+          />
+          <rect
+            height="5"
+            rx="1"
+            width="7"
+            x="3"
+            y="16"
+          />
+        </svg>
+        <span>
+          Dashboard
+        </span>
+      </a>
+      <a
+        class="group flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-150 text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900"
+        href="/dashboard/campaigns"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-megaphone size-4 flex-shrink-0 text-zinc-500 group-hover:text-zinc-700"
+          fill="none"
+          height="24"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M11 6a13 13 0 0 0 8.4-2.8A1 1 0 0 1 21 4v12a1 1 0 0 1-1.6.8A13 13 0 0 0 11 14H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2z"
+          />
+          <path
+            d="M6 14a12 12 0 0 0 2.4 7.2 2 2 0 0 0 3.2-2.4A8 8 0 0 1 10 14"
+          />
+          <path
+            d="M8 6v8"
+          />
+        </svg>
+        <span>
+          Campaigns
+        </span>
+      </a>
+      <a
+        class="group flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-150 text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900"
+        href="/dashboard/query"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-message-square size-4 flex-shrink-0 text-zinc-500 group-hover:text-zinc-700"
+          fill="none"
+          height="24"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"
+          />
+        </svg>
+        <span>
+          Query
+        </span>
+      </a>
+      <a
+        class="group flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-150 text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900"
+        href="/dashboard/reports"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-file-text size-4 flex-shrink-0 text-zinc-500 group-hover:text-zinc-700"
+          fill="none"
+          height="24"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"
+          />
+          <path
+            d="M14 2v5a1 1 0 0 0 1 1h5"
+          />
+          <path
+            d="M10 9H8"
+          />
+          <path
+            d="M16 13H8"
+          />
+          <path
+            d="M16 17H8"
+          />
+        </svg>
+        <span>
+          Reports
+        </span>
+      </a>
+      <a
+        class="group flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-150 text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900"
+        href="/dashboard/connectors"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-plug size-4 flex-shrink-0 text-zinc-500 group-hover:text-zinc-700"
+          fill="none"
+          height="24"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M12 22v-5"
+          />
+          <path
+            d="M15 8V2"
+          />
+          <path
+            d="M17 8a1 1 0 0 1 1 1v4a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4V9a1 1 0 0 1 1-1z"
+          />
+          <path
+            d="M9 8V2"
+          />
+        </svg>
+        <span>
+          Connectors
+        </span>
+      </a>
+      <a
+        class="group flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-150 text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900"
+        href="/dashboard/insights"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-lightbulb size-4 flex-shrink-0 text-zinc-500 group-hover:text-zinc-700"
+          fill="none"
+          height="24"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"
+          />
+          <path
+            d="M9 18h6"
+          />
+          <path
+            d="M10 22h4"
+          />
+        </svg>
+        <span>
+          Insights
+        </span>
+      </a>
+      <a
+        class="group flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-150 text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900"
+        href="/dashboard/settings"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-settings size-4 flex-shrink-0 text-zinc-500 group-hover:text-zinc-700"
+          fill="none"
+          height="24"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915"
+          />
+          <circle
+            cx="12"
+            cy="12"
+            r="3"
+          />
+        </svg>
+        <span>
+          Settings
+        </span>
+      </a>
+      <a
+        class="group flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-150 text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900"
+        href="/dashboard/rag-demo"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-flask-conical size-4 flex-shrink-0 text-zinc-500 group-hover:text-zinc-700"
+          fill="none"
+          height="24"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M14 2v6a2 2 0 0 0 .245.96l5.51 10.08A2 2 0 0 1 18 22H6a2 2 0 0 1-1.755-2.96l5.51-10.08A2 2 0 0 0 10 8V2"
+          />
+          <path
+            d="M6.453 15h11.094"
+          />
+          <path
+            d="M8.5 2h7"
+          />
+        </svg>
+        <span>
+          RAG Demo
+        </span>
+      </a>
+    </nav>
+    <div
+      class="border-t border-zinc-100 p-3"
+    >
+      <button
+        class="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-xs font-medium text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-700"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-chevron-left size-4"
+          fill="none"
+          height="24"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="m15 18-6-6 6-6"
+          />
+        </svg>
+        <span>
+          Collapse
+        </span>
+      </button>
+    </div>
+  </aside>
+</div>
+`;
+
+exports[`Component Snapshots > Topbar > matches snapshot 1`] = `
+<div>
+  <header
+    class="flex h-14 items-center justify-between border-b border-zinc-200 bg-white px-4 sm:px-6"
+  >
+    <div
+      class="flex items-center gap-2"
+    >
+      <nav
+        class="flex items-center gap-1 text-sm"
+      >
+        <div
+          class="flex items-center gap-1"
+        >
+          <span
+            class="font-medium text-zinc-900"
+          >
+            Dashboard
+          </span>
+        </div>
+      </nav>
+      <span
+        class="group/badge h-5 w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-4xl border border-transparent px-2 py-0.5 whitespace-nowrap transition-all focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&>svg]:pointer-events-none [&>svg]:size-3! [a]:hover:bg-secondary/80 ml-2 bg-zinc-100 text-zinc-600 text-[10px] font-medium hidden sm:inline-flex"
+        data-slot="badge"
+        data-variant="secondary"
+      >
+        Demo
+      </span>
+    </div>
+    <div
+      class="flex items-center gap-2"
+    >
+      <button
+        class="hidden md:flex items-center gap-2 rounded-lg border border-zinc-200 bg-white px-3 py-1.5 text-sm text-zinc-500 hover:border-zinc-300 hover:bg-zinc-50 transition-colors"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-search size-4"
+          fill="none"
+          height="24"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="m21 21-4.34-4.34"
+          />
+          <circle
+            cx="11"
+            cy="11"
+            r="8"
+          />
+        </svg>
+        <span>
+          Search...
+        </span>
+        <kbd
+          class="ml-2 inline-flex items-center gap-0.5 rounded border border-zinc-200 bg-zinc-50 px-1.5 py-0.5 text-[10px] font-mono text-zinc-500"
+        >
+          <span
+            class="text-xs"
+          >
+            ⌘
+          </span>
+          K
+        </kbd>
+      </button>
+      <button
+        aria-expanded="false"
+        aria-haspopup="menu"
+        class="relative flex items-center justify-center rounded-lg p-2 transition-colors hover:bg-zinc-50"
+        data-slot="dropdown-menu-trigger"
+        id="base-ui-_r_4_"
+        tabindex="0"
+        type="button"
+      >
+        <svg
+          aria-hidden="true"
+          class="lucide lucide-bell size-5 text-zinc-600"
+          fill="none"
+          height="24"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M10.268 21a2 2 0 0 0 3.464 0"
+          />
+          <path
+            d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"
+          />
+        </svg>
+        <span
+          class="absolute -top-0.5 -right-0.5 flex size-4 items-center justify-center rounded-full bg-red-500 text-[10px] font-medium text-white"
+        >
+          3
+        </span>
+      </button>
+      <button
+        aria-expanded="false"
+        aria-haspopup="menu"
+        class="flex items-center gap-2 rounded-lg p-1 transition-colors hover:bg-zinc-100"
+        data-slot="dropdown-menu-trigger"
+        id="base-ui-_r_a_"
+        tabindex="0"
+        type="button"
+      >
+        <span
+          class="group/avatar relative flex shrink-0 rounded-full select-none after:absolute after:inset-0 after:rounded-full after:border after:border-border after:mix-blend-darken data-[size=lg]:size-10 data-[size=sm]:size-6 dark:after:mix-blend-lighten size-7 border border-zinc-200"
+          data-size="default"
+          data-slot="avatar"
+        >
+          <span
+            class="flex size-full items-center justify-center rounded-full group-data-[size=sm]/avatar:text-xs bg-zinc-100 text-zinc-700 text-xs font-medium"
+            data-slot="avatar-fallback"
+          >
+            DU
+          </span>
+        </span>
+      </button>
+    </div>
+  </header>
+</div>
+`;

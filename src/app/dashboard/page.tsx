@@ -1,16 +1,12 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import { KPICard } from "@/components/kpi-card";
 import { RevenueChart } from "@/components/charts/revenue-chart";
 import { CampaignChart } from "@/components/charts/campaign-chart";
 import { ChannelChart } from "@/components/charts/channel-chart";
 import { InsightCard } from "@/components/insight-card";
-import { DateRangePicker } from "@/components/date-range-picker";
-import { FilterBar } from "@/components/filter-bar";
-import { ExportMenu } from "@/components/export-menu";
-import { exportToCSV } from "@/lib/export";
-import { usePolling } from "@/hooks/use-polling";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   kpiData,
   revenueData,
@@ -19,6 +15,14 @@ import {
   recentInsights,
 } from "@/lib/mock-data";
 import type { Insight } from "@/lib/mock-data";
+import { Calendar, ArrowRight } from "lucide-react";
+import Link from "next/link";
+
+const periods = [
+  { value: "7d", label: "7 days" },
+  { value: "30d", label: "30 days" },
+  { value: "90d", label: "90 days" },
+] as const;
 
 export default function DashboardPage() {
   const [kpis, setKpis] = useState(kpiData);
@@ -26,154 +30,122 @@ export default function DashboardPage() {
   const [campaigns, setCampaigns] = useState(campaignData);
   const [channels, setChannels] = useState(channelData);
   const [insights, setInsights] = useState<Insight[]>(recentInsights);
-  const [loaded, setLoaded] = useState(false);
-  const [activePeriod, setActivePeriod] = useState("30d");
-
-  const fetchData = useCallback(async () => {
-    try {
-      const { getKPIs, getRevenue, getCampaigns, getChannels, getInsights } =
-        await import("@/lib/api");
-      const [k, r, ca, ch, i] = await Promise.all([
-        getKPIs(activePeriod),
-        getRevenue(activePeriod),
-        getCampaigns(activePeriod),
-        getChannels(activePeriod),
-        getInsights(activePeriod),
-      ]);
-      setKpis(k);
-      setRevenue(r);
-      setCampaigns(ca);
-      setChannels(ch);
-      setInsights((i as Insight[]).slice(0, 5));
-    } catch {
-      // fallback to mock data already set
-    }
-    setLoaded(true);
-  }, [activePeriod]);
+  const [activePeriod, setActivePeriod] = useState<"7d" | "30d" | "90d">("30d");
 
   useEffect(() => {
+    async function fetchData() {
+      try {
+        const { getKPIs, getRevenue, getCampaigns, getChannels, getInsights } =
+          await import("@/lib/api");
+        const [k, r, ca, ch, i] = await Promise.all([
+          getKPIs(),
+          getRevenue(),
+          getCampaigns(),
+          getChannels(),
+          getInsights(),
+        ]);
+        setKpis(k.data);
+        setRevenue(r.data);
+        setCampaigns(ca.data);
+        setChannels(ch.data);
+        setInsights(i.data.slice(0, 5));
+      } catch {
+        // fallback to mock data already set
+      }
+    }
     fetchData();
-  }, [fetchData]);
-
-  const { isRefreshing, timeAgo } = usePolling(fetchData, 60000);
-
-  const handleExportCSV = () => {
-    const exportData = revenue.map((r) => ({
-      month: r.month,
-      revenue: r.revenue,
-      spend: r.spend,
-      roi: r.revenue && r.spend ? (r.revenue / r.spend).toFixed(2) : "N/A",
-    }));
-    exportToCSV(exportData as unknown as Record<string, unknown>[], `dashboard-${activePeriod}`);
-  };
+  }, []);
 
   return (
-    <div className="space-y-6">
-      {/* Header row with date range picker and export */}
-      <div
-        className={`flex items-center justify-between transition-all duration-500 ${
-          loaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
-        }`}
-      >
+    <div className="space-y-6 animate-fade-in-up">
+      {/* Header */}
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-xl font-semibold text-zinc-900">Overview</h1>
+          <h1 className="text-lg font-semibold gradient-text">
+            Overview
+          </h1>
           <p className="text-sm text-zinc-500">
-            Track your marketing performance
-            <span className="ml-2 text-zinc-400">
-              {isRefreshing ? "Refreshing..." : `Updated ${timeAgo()}`}
-            </span>
+            Track your marketing performance across all channels
           </p>
         </div>
-        <div className="flex items-center gap-3">
-          <DateRangePicker
-            onPeriodChange={setActivePeriod}
-            activePeriod={activePeriod}
-          />
-          <ExportMenu onExportCSV={handleExportCSV} />
+        <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5 text-xs text-zinc-500">
+            <Calendar className="size-3.5" />
+            <span>Period:</span>
+          </div>
+          <div className="flex rounded-lg border border-zinc-200 bg-white p-0.5">
+            {periods.map((period) => (
+              <button
+                key={period.value}
+                onClick={() => setActivePeriod(period.value)}
+                className={`rounded-md px-3 py-1.5 text-xs font-medium transition-all ${
+                  activePeriod === period.value
+                    ? "bg-zinc-900 text-white shadow-sm"
+                    : "text-zinc-600 hover:text-zinc-900"
+                }`}
+              >
+                {period.label}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 
-      {/* Filter bar */}
-      <div
-        className={`transition-all duration-500 ${
-          loaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
-        }`}
-      >
-        <FilterBar />
-      </div>
-
-      {/* KPI Cards */}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      {/* KPI Cards Grid */}
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {kpis.map((kpi, i) => (
-          <div
-            key={kpi.title}
-            className={`transition-all duration-500 ${
-              loaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-            }`}
-            style={{ transitionDelay: `${i * 75}ms` }}
-          >
+          <div key={kpi.title} className={`animate-fade-in-up hover-lift stagger-${i + 1}`}>
             <KPICard {...kpi} />
           </div>
         ))}
       </div>
 
-      {/* Charts row */}
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-        <div
-          className={`lg:col-span-2 transition-all duration-500 ${
-            loaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-          }`}
-          style={{ transitionDelay: "300ms" }}
-        >
+      {/* Main Charts Row */}
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+        <div className="lg:col-span-2 animate-fade-in-scale stagger-3">
           <RevenueChart data={revenue} />
         </div>
-        <div
-          className={`transition-all duration-500 ${
-            loaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-          }`}
-          style={{ transitionDelay: "375ms" }}
-        >
+        <div className="animate-fade-in-scale stagger-4">
           <ChannelChart data={channels} />
         </div>
       </div>
 
-      {/* Bottom row */}
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-        <div
-          className={`lg:col-span-2 transition-all duration-500 ${
-            loaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-          }`}
-          style={{ transitionDelay: "450ms" }}
-        >
+      {/* Secondary Row */}
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+        <div className="lg:col-span-2 animate-fade-in-scale stagger-5">
           <CampaignChart data={campaigns} />
         </div>
-        <div
-          className={`transition-all duration-500 ${
-            loaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-          }`}
-          style={{ transitionDelay: "525ms" }}
-        >
-          <div className="flex items-center justify-between mb-3">
-            <h3 className="text-sm font-medium text-zinc-500">Recent Insights</h3>
-          </div>
-          <div className="space-y-3">
-            {insights.map((insight, i) => (
-              <div
-                key={insight.id}
-                className={`transition-all duration-500 ${
-                  loaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
-                }`}
-                style={{ transitionDelay: `${600 + i * 60}ms` }}
-              >
-                <InsightCard
-                  severity={insight.severity}
-                  title={insight.title}
-                  description={insight.description}
-                  timestamp={insight.timestamp}
-                />
+        <div className="animate-fade-in-scale stagger-6">
+          <Card className="border-zinc-200 shadow-sm rounded-xl h-full hover-lift">
+            <CardHeader className="pb-3">
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-sm font-medium text-zinc-500">
+                  Recent Insights
+                </CardTitle>
+                <Link
+                  href="/dashboard/insights"
+                  className="flex items-center gap-1 text-xs font-medium text-zinc-500 hover:text-zinc-900 transition-colors"
+                >
+                  View all
+                  <ArrowRight className="size-3" />
+                </Link>
               </div>
-            ))}
-          </div>
+            </CardHeader>
+            <CardContent className="pt-0">
+              <div className="space-y-3">
+                {insights.slice(0, 4).map((insight) => (
+                  <InsightCard
+                    key={insight.id}
+                    severity={insight.severity}
+                    title={insight.title}
+                    description={insight.description}
+                    timestamp={insight.timestamp}
+                    compact
+                  />
+                ))}
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </div>

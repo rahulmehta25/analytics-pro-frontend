@@ -8,15 +8,40 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { ArrowRight } from "lucide-react";
+import { demoLogin, login as loginAPI } from "@/lib/auth";
 
 export default function LoginPage() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleDemo = async () => {
+    setError("");
+    setLoading(true);
+    const result = await demoLogin();
+    setLoading(false);
+    if (result.ok) {
+      router.push("/dashboard");
+      router.refresh();
+    } else {
+      setError(result.error);
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    router.push("/dashboard");
+    setError("");
+    setLoading(true);
+    const result = await loginAPI(email, password);
+    setLoading(false);
+    if (result.ok) {
+      router.push("/dashboard");
+      router.refresh();
+    } else {
+      setError(result.error);
+    }
   };
 
   return (
@@ -27,11 +52,12 @@ export default function LoginPage() {
           <p className="text-sm text-zinc-500">Sign in to your account</p>
         </div>
 
-        <Card className="border-zinc-200 shadow-sm rounded-xl">
+        <Card className="border-zinc-200 shadow-sm rounded-xl animate-fade-in-scale">
           <CardContent className="p-6 space-y-4">
             <Button
               className="w-full gap-2 bg-blue-600 hover:bg-blue-700 text-white"
-              onClick={() => router.push("/dashboard")}
+              onClick={handleDemo}
+              disabled={loading}
             >
               Continue with Demo
               <ArrowRight className="size-4" />
@@ -65,8 +91,11 @@ export default function LoginPage() {
                   className="border-zinc-200"
                 />
               </div>
-              <Button type="submit" variant="outline" className="w-full">
-                Sign in
+              {error && (
+                <p className="text-sm text-red-500 text-center">{error}</p>
+              )}
+              <Button type="submit" variant="outline" className="w-full" disabled={loading}>
+                {loading ? "Signing in..." : "Sign in"}
               </Button>
             </form>
           </CardContent>

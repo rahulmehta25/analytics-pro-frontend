@@ -4,7 +4,6 @@ import {
   Area,
   AreaChart,
   CartesianGrid,
-  Legend,
   ResponsiveContainer,
   Tooltip,
   XAxis,
@@ -20,93 +19,100 @@ function formatCurrency(value: number) {
   return `$${(value / 1000).toFixed(0)}K`;
 }
 
+const COLORS = {
+  revenue: "#3b82f6",
+  spend: "#10b981",
+};
+
 export function RevenueChart({ data }: RevenueChartProps) {
   return (
     <Card className="border-zinc-200 shadow-sm rounded-xl">
       <CardHeader className="pb-2">
-        <CardTitle className="text-sm font-medium text-zinc-500">
-          Revenue vs Spend
-        </CardTitle>
+        <div className="flex items-center justify-between">
+          <CardTitle className="text-sm font-medium text-zinc-500">
+            Revenue vs Spend
+          </CardTitle>
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-1.5">
+              <div className="size-2 rounded-full" style={{ backgroundColor: COLORS.revenue }} />
+              <span className="text-xs text-zinc-500">Revenue</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <div className="size-2 rounded-full" style={{ backgroundColor: COLORS.spend }} />
+              <span className="text-xs text-zinc-500">Spend</span>
+            </div>
+          </div>
+        </div>
       </CardHeader>
       <CardContent>
         <ResponsiveContainer width="100%" height={280}>
-          <AreaChart data={data} margin={{ top: 8, right: 8, bottom: 0, left: -16 }}>
+          <AreaChart data={data} margin={{ top: 8, right: 8, bottom: 0, left: -20 }}>
             <defs>
               <linearGradient id="revenueGradient" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#2563eb" stopOpacity={0.15} />
-                <stop offset="100%" stopColor="#2563eb" stopOpacity={0} />
+                <stop offset="0%" stopColor={COLORS.revenue} stopOpacity={0.12} />
+                <stop offset="100%" stopColor={COLORS.revenue} stopOpacity={0} />
               </linearGradient>
               <linearGradient id="spendGradient" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#10b981" stopOpacity={0.1} />
-                <stop offset="100%" stopColor="#10b981" stopOpacity={0} />
+                <stop offset="0%" stopColor={COLORS.spend} stopOpacity={0.08} />
+                <stop offset="100%" stopColor={COLORS.spend} stopOpacity={0} />
               </linearGradient>
             </defs>
-            <CartesianGrid strokeDasharray="3 3" stroke="#e4e4e7" vertical={false} />
+            <CartesianGrid strokeDasharray="3 3" stroke="#f4f4f5" vertical={false} />
             <XAxis
               dataKey="month"
               axisLine={false}
               tickLine={false}
-              tick={{ fill: "#71717a", fontSize: 12 }}
+              tick={{ fill: "#a1a1aa", fontSize: 11 }}
+              dy={8}
             />
             <YAxis
               axisLine={false}
               tickLine={false}
-              tick={{ fill: "#71717a", fontSize: 12 }}
+              tick={{ fill: "#a1a1aa", fontSize: 11 }}
               tickFormatter={formatCurrency}
+              dx={-4}
             />
             <Tooltip
               contentStyle={{
                 backgroundColor: "white",
                 border: "1px solid #e4e4e7",
                 borderRadius: "8px",
-                boxShadow: "0 1px 3px rgba(0,0,0,0.08)",
-                fontSize: "13px",
+                boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+                fontSize: "12px",
+                padding: "8px 12px",
               }}
               formatter={(value, name) => [
                 `$${Number(value).toLocaleString()}`,
                 String(name).charAt(0).toUpperCase() + String(name).slice(1),
               ]}
-            />
-            <Legend
-              verticalAlign="top"
-              align="right"
-              iconType="circle"
-              iconSize={8}
-              wrapperStyle={{ fontSize: "12px", paddingBottom: "8px" }}
-              formatter={(value: string) => (
-                <span className="text-zinc-500 capitalize">{value}</span>
-              )}
+              labelStyle={{ fontWeight: 500, marginBottom: 4 }}
             />
             <Area
               type="monotone"
               dataKey="revenue"
-              stroke="#2563eb"
+              stroke={COLORS.revenue}
               strokeWidth={2}
               fill="url(#revenueGradient)"
               dot={false}
-              activeDot={{ r: 4, fill: "#2563eb" }}
+              activeDot={{ r: 4, fill: COLORS.revenue, strokeWidth: 0 }}
+              animationBegin={0}
+              animationDuration={1200}
+              animationEasing="ease-out"
             />
             <Area
               type="monotone"
               dataKey="spend"
-              stroke="#10b981"
+              stroke={COLORS.spend}
               strokeWidth={2}
               fill="url(#spendGradient)"
               dot={false}
-              activeDot={{ r: 4, fill: "#10b981" }}
+              activeDot={{ r: 4, fill: COLORS.spend, strokeWidth: 0 }}
+              animationBegin={0}
+              animationDuration={1200}
+              animationEasing="ease-out"
             />
           </AreaChart>
         </ResponsiveContainer>
-        <div className="mt-2 flex items-center gap-6 px-2">
-          <div className="flex items-center gap-2">
-            <div className="h-2 w-2 rounded-full bg-blue-600" />
-            <span className="text-xs text-zinc-500">Revenue</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="h-2 w-2 rounded-full bg-emerald-500" />
-            <span className="text-xs text-zinc-500">Spend</span>
-          </div>
-        </div>
       </CardContent>
     </Card>
   );

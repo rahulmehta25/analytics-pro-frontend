@@ -10,12 +10,12 @@ const presets = [
   { label: "Quarter", days: 90 },
 ] as const;
 
-interface DateRangePickerProps {
-  onPeriodChange: (period: string) => void;
-  activePeriod: string;
+export interface DateRangePickerProps {
+  onPeriodChange?: (period: string) => void;
+  activePeriod?: string;
 }
 
-export function DateRangePicker({ onPeriodChange, activePeriod }: DateRangePickerProps) {
+export function DateRangePicker({ onPeriodChange, activePeriod = "30d" }: DateRangePickerProps) {
   const [showCustom, setShowCustom] = useState(false);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -31,7 +31,7 @@ export function DateRangePicker({ onPeriodChange, activePeriod }: DateRangePicke
             size="sm"
             onClick={() => {
               setShowCustom(false);
-              onPeriodChange(preset.label === "Quarter" ? "90d" : preset.label);
+              onPeriodChange?.(preset.label === "Quarter" ? "90d" : preset.label);
             }}
             className={`h-7 px-3 text-xs font-medium rounded-md transition-colors ${
               activePeriod === (preset.label === "Quarter" ? "90d" : preset.label) && !showCustom
